@@ -1,7 +1,93 @@
+import sum from 'ml-array-sum';
+import variance from 'ml-array-variance';
+import covariance from 'ml-array-xy-covariance';
+import { Matrix, EigenvalueDecomposition } from 'ml-matrix';
+
 /**
- * My module
- * @returns A very important number
+ * Calculates the Directional Ellipse for a set of points with a specific standard deviation (1, 2 or 3)
+ * @param {object} [points]
+ * @param {Array} [points.x]
+ * @param {Array} [points.y]
+ * @param {object} [options={}]
+ * @param {number} [options.nbSD=2]
+ * @param {number} [options.props={fillColor='#FF0',fillOpacity=0.5,strokeWidth=0.00001,strokeColor='#F00',strokeDasharray=[1]}]
  */
-export function myModule(): number {
-  return 42;
+export function getDirectionalEllipse(points : {x : number[], y : number[]}, options : {nbSD : number, props : {fillColor : string, fillOpacity : number, strokeWidth : number, strokeColor : string, strokeDasharray : number[]}}) {
+  
+  const {
+    nbSD = 2,
+    props = {
+      fillColor: '#FF0',
+      fillOpacity: 0.5,
+      strokeWidth: 0.00001,
+      strokeColor: '#F00',
+      strokeDasharray: [1],
+    },
+  } = options;
+
+  let xCenter = sum(points.x) / points.x.length;
+  let yCenter = sum(points.y) / points.y.length;
+
+  let xCentered = points.x.map((x) => x - xCenter);
+  let yCentered = points.y.map((y) => y - yCenter);
+
+  let centeredXVariance = variance(xCentered, {unbiased : false});
+  let centeredYVariance = variance(yCentered, {unbiased : false});
+
+  let centeredCovariance = covariance({
+    x: xCentered,
+    y: yCentered,
+  }, {unbiased : false});
+
+  //spectral decomposition of the sample covariance matrix
+  let sampleCovarianceMatrix = new Matrix([[centeredXVariance, centeredCovariance], [centeredCovariance, centeredYVariance]]);
+  let e = new EigenvalueDecomposition(sampleCovarianceMatrix);
+  let eigenvalues = e.realEigenvalues;
+  let vectors = e.eigenvectorMatrix;
+
+  let rMajor : number;
+  let rMinor : number;
+  let vectorMajor : number[];
+  let vectorMinor : number[];
+
+  if (eigenvalues[0] > eigenvalues[1]) {
+    rMajor = Math.sqrt(eigenvalues[0]*nbSD);
+    rMinor = Math.sqrt(eigenvalues[1]*nbSD);
+    vectorMajor = vectors.getColumn(0);
+    vectorMinor = vectors.getColumn(1);
+  } else if (eigenvalues[0] < eigenvalues[1]) {
+    rMajor = Math.sqrt(eigenvalues[1]*nbSD);
+    rMinor = Math.sqrt(eigenvalues[0]*nbSD);
+    vectorMajor = vectors.getColumn(1);
+    vectorMinor = vectors.getColumn(0);
+  } else {
+    // order here does not matter 
+    rMajor = Math.sqrt(eigenvalues[1]*nbSD);
+    rMinor = Math.sqrt(eigenvalues[0]*nbSD); 
+    vectorMajor = vectors.getColumn(1);
+    vectorMinor = vectors.getColumn(0);
+  }
+
+  let majorAxisPoint1 = {x : xCenter + rMajor*vectorMajor[0], y : yCenter + rMajor*vectorMajor[1]};
+  let majorAxisPoint2 = {x : xCenter - rMajor*vectorMajor[0], y : yCenter - rMajor*vectorMajor[1]};
+  let minorAxisPoint1 = {x : xCenter + rMinor*vectorMinor[0], y : yCenter + rMinor*vectorMinor[1]};
+  let minorAxisPoint2 = {x : xCenter - rMinor*vectorMinor[0], y : yCenter - rMinor*vectorMinor[1]};
+
+  return { 
+    rMajor : rMajor,
+    rMinor : rMinor,
+    position: {
+      x: xCenter,
+      y: yCenter,
+    },
+    majorAxis : {
+      point1 : majorAxisPoint1,
+      point2 : majorAxisPoint2,
+    },
+    minorAxis : {
+      point1 : minorAxisPoint1,
+      point2 : minorAxisPoint2,
+    },
+    props
+  };
 }
