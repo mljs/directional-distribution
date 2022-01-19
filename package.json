@@ -1,5 +1,5 @@
 {
-  "name": "ml-ml-directional-distribution",
+  "name": "ml-directional-distribution",
   "version": "0.0.0",
   "description": "Calculate direction distribution from points",
   "main": "./lib/index.js",
