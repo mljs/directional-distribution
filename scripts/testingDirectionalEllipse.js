@@ -1,6 +1,6 @@
 const DE = require('../lib/index.js');
 
-let { rMajor, rMinor, position, majorAxis, minorAxis, props } =
+let { rMajor, rMinor, position, majorAxis, minorAxis } =
   DE.getDirectionalEllipse(
     {
       x: [1, 2, 3, 4, 5, 6],

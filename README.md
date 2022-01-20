@@ -5,30 +5,41 @@
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
-Calculate direction distribution from points.
+Calculate the directional distribution from points.
 
 ## Installation
 
-`$ npm i ml-ml-directional-distribution`
+`$ npm i ml-directional-distribution`
 
 ## Usage
 
-```js
-import { myModule } from 'ml-ml-directional-distribution';
+- rMajor is the radius of the major axis
+- rMinor is the radius of the minor axis
+- (position.x, position.y) are the coordinates of the center of the ellipse
+- majorAxis.point1 and majorAxis.point2 are the coordinates of the extremities of the major axis
+- minorAxis.point1 and minorAxis.point2 are the coordinates of the extremities of the minor axis
 
-const result = myModule(args);
-// result is ...
+```js
+import { getDirectionalEllipse } from 'ml-directional-distribution';
+
+let { rMajor, rMinor, position, majorAxis, minorAxis } = getDirectionalEllipse(
+  {
+    x: [1, 2, 3, 4, 5, 6],
+    y: [1, 4, 2, 5, 3, 6],
+  },
+  { nbSD: 3 },
+);
 ```
 
 ## License
 
 [MIT](./LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/ml-ml-directional-distribution.svg
-[npm-url]: https://www.npmjs.com/package/ml-ml-directional-distribution
+[npm-image]: https://img.shields.io/npm/v/ml-directional-distribution.svg
+[npm-url]: https://www.npmjs.com/package/ml-directional-distribution
 [ci-image]: https://github.com/mljs/ml-directional-distribution/workflows/Node.js%20CI/badge.svg?branch=main
 [ci-url]: https://github.com/mljs/ml-directional-distribution/actions?query=workflow%3A%22Node.js+CI%22
 [codecov-image]: https://img.shields.io/codecov/c/github/mljs/ml-directional-distribution.svg
 [codecov-url]: https://codecov.io/gh/mljs/ml-directional-distribution
-[download-image]: https://img.shields.io/npm/dm/ml-ml-directional-distribution.svg
-[download-url]: https://www.npmjs.com/package/ml-ml-directional-distribution
+[download-image]: https://img.shields.io/npm/dm/ml-directional-distribution.svg
+[download-url]: https://www.npmjs.com/package/ml-directional-distribution
