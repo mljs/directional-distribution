@@ -11,7 +11,7 @@ describe('getDirectionalEllipse', () => {
         x: [1, 2, 3, 4, 5, 6],
         y: [1, 4, 2, 5, 3, 6],
       },
-      {nbSD : 3},
+      { nbSD: 3 },
     );
 
     expect(result).toBeDeepCloseTo(

@@ -10,9 +10,11 @@ import { EigenvalueDecomposition } from 'ml-matrix';
  * @param {object} [options = {}]
  * @param {number} [options.nbSD = 2] - the number of standard deviations, nbSD = 1 will cover about 68% of the data, nbSD = 2 will cover about 95% of the data and nbSD = 3 will cover about 99.7% of the data
  */
-export function getDirectionalEllipse(points: DataXY, options?: {nbSD: number}) {
-
-  let nbSD = (typeof options !== 'undefined') ? options.nbSD : 2;
+export function getDirectionalEllipse(
+  points: DataXY,
+  options?: { nbSD: number },
+) {
+  let nbSD = typeof options !== 'undefined' ? options.nbSD : 2;
 
   let xCenter = sum(points.x) / points.x.length;
   let yCenter = sum(points.y) / points.y.length;
