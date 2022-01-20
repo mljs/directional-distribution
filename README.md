@@ -13,6 +13,10 @@ Calculate the directional distribution from points.
 
 ## Usage
 
+You can call getDirectionalEllipse on two arrays x and y containing the x and y coordinates of the points for which you want to find the directional ellipse. It is also possible to specify the number of standard deviations nbSD. If nbSD is 1, the ellipse will cover about 68% of the points, if nbSD is 2, the ellipse will cover about 95% of the points and if nbSD is 3, the ellipse will cover about 99% of the points.
+
+The return type contains the following data:
+
 - rMajor is the radius of the major axis
 - rMinor is the radius of the minor axis
 - (position.x, position.y) are the coordinates of the center of the ellipse
