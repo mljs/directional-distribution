@@ -1,33 +1,15 @@
+import { DataXY } from 'cheminfo-types';
 import sum from 'ml-array-sum';
 import variance from 'ml-array-variance';
 import covariance from 'ml-array-xy-covariance';
-import { Matrix, EigenvalueDecomposition } from 'ml-matrix';
+import { EigenvalueDecomposition } from 'ml-matrix';
 
 /**
  * Calculates the Directional Ellipse for a set of points with a specific standard deviation
- * @param {object} [points]
- * @param {Array} [points.x]
- * @param {Array} [points.y]
+ * @param {DataXY} [points]
  * @param {number} [nbSD=2]
- * @param {object} [props={fillColor='#FF0',fillOpacity=0.5,strokeWidth=0.00001,strokeColor='#F00',strokeDasharray=[1]}]
  */
-export function getDirectionalEllipse(
-  points: { x: number[]; y: number[] },
-  nbSD = 2,
-  props: {
-    fillColor: string;
-    fillOpacity: number;
-    strokeWidth: number;
-    strokeColor: string;
-    strokeDasharray: number[];
-  } = {
-    fillColor: '#FF0',
-    fillOpacity: 0.5,
-    strokeWidth: 0.00001,
-    strokeColor: '#F00',
-    strokeDasharray: [1],
-  },
-) {
+export function getDirectionalEllipse(points: DataXY, nbSD = 2) {
   let xCenter = sum(points.x) / points.x.length;
   let yCenter = sum(points.y) / points.y.length;
 
@@ -46,10 +28,10 @@ export function getDirectionalEllipse(
   );
 
   //spectral decomposition of the sample covariance matrix
-  let sampleCovarianceMatrix = new Matrix([
+  let sampleCovarianceMatrix = [
     [centeredXVariance, centeredCovariance],
     [centeredCovariance, centeredYVariance],
-  ]);
+  ];
   let e = new EigenvalueDecomposition(sampleCovarianceMatrix);
   let eigenvalues = e.realEigenvalues;
   let vectors = e.eigenvectorMatrix;
@@ -109,6 +91,5 @@ export function getDirectionalEllipse(
       point1: minorAxisPoint1,
       point2: minorAxisPoint2,
     },
-    ...props,
   };
 }
