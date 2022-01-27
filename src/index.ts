@@ -6,15 +6,21 @@ import { EigenvalueDecomposition } from 'ml-matrix';
 
 /**
  * Calculates the Directional Ellipse for a set of points with a specific standard deviation
- * @param [points] - variable points is of type DataXY, points.x contins the x coordinates of the points, points.y contains the y coordinates of the points
+ * @param [points] - variable points is of type DataXY, points.x contains the x coordinates of the points, points.y contains the y coordinates of the points
  * @param [options = {}]
  * @param [options.nbSD = 2] - the number of standard deviations, nbSD = 1 will cover about 68% of the data, nbSD = 2 will cover about 95% of the data and nbSD = 3 will cover about 99.7% of the data
  */
 export function getDirectionalEllipse(
   points: DataXY,
-  options?: { nbSD: number },
+  options: {
+    /**
+     * Number of standard deviations
+     * @default 2
+     **/
+    nbSD?: number;
+  } = {},
 ) {
-  let nbSD = typeof options !== 'undefined' ? options.nbSD : 2;
+  const { nbSD = 2 } = options;
 
   let xCenter = sum(points.x) / points.x.length;
   let yCenter = sum(points.y) / points.y.length;
