@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/mljs/directional-distribution/compare/v0.1.0...v0.1.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* update dependencies ([3cba076](https://github.com/mljs/directional-distribution/commit/3cba0767b4bedfca20663f947aeb8affaf847be9))
+
 ## 0.1.0 (2022-01-20)
 
 
