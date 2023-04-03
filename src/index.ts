@@ -1,6 +1,11 @@
 import { DataXY } from 'cheminfo-types';
 import { EigenvalueDecomposition } from 'ml-matrix';
-import { xSum, xVariance, xyCovariance } from 'ml-spectra-processing';
+import {
+  xSum,
+  xVariance,
+  xyCovariance,
+  xSubtract,
+} from 'ml-spectra-processing';
 
 /**
  * Calculates the Directional Ellipse for a set of points with a specific standard deviation
@@ -23,8 +28,8 @@ export function getDirectionalEllipse(
   let xCenter = xSum(points.x) / points.x.length;
   let yCenter = xSum(points.y) / points.y.length;
 
-  let xCentered = points.x.map((x) => x - xCenter);
-  let yCentered = points.y.map((y) => y - yCenter);
+  let xCentered = xSubtract(points.x, xCenter);
+  let yCentered = xSubtract(points.y, xCenter);
 
   let centeredXVariance = xVariance(xCentered, { unbiased: false });
   let centeredYVariance = xVariance(yCentered, { unbiased: false });
